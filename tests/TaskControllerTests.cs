@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using demo_api.controllers;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,11 @@ namespace tests
 {
     public class TaskControllerTests
     {
+        public TaskControllerTests()
+        {
+            Environment.SetEnvironmentVariable("MONGODB_CONNECTION_STRING", "mongodb://root:pwd@localhost:9001");
+        }
+        
         [Fact]
         public void FetchAllTasks_ReturnsOkResult()
         {
