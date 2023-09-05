@@ -10,15 +10,15 @@ namespace demo_api.controllers
     {
         
         [HttpGet]
-        public async Task<IActionResult> FetchLatestExchangeRates([FromQuery] string @base="USD")
+        public IActionResult FetchLatestExchangeRates([FromQuery] string @base="USD")
         {
             var requestUrl = $"https://api.exchangerate.host/latest?base={@base}";
 
             using var client = new HttpClient();
-            var response = await client.GetAsync(requestUrl);
+            var response = client.GetAsync(requestUrl).Result;
 
             if (!response.IsSuccessStatusCode) return NotFound();
-            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var jsonResponse = response.Content.ReadAsStringAsync().Result;
             return Ok(JsonSerializer.Deserialize<dynamic>(jsonResponse));
         }
         

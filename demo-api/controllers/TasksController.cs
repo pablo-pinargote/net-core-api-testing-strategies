@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using demo_api.models;
@@ -22,7 +23,6 @@ namespace demo_api.controllers
             "Done"
         };
         
-        private const string ConnectionString = "mongodb://root:pwd@localhost:9001";
         private const string DatabaseName = "todo";
         private const string CollectionName = "tasks";
 
@@ -30,7 +30,8 @@ namespace demo_api.controllers
 
         public TasksController()
         {
-            _client = new MongoClient(ConnectionString);
+            var connectionString = Environment.GetEnvironmentVariable("MONGODB_CONNECTION_STRING");
+            _client = new MongoClient(connectionString);
         }
 
         [HttpGet]
