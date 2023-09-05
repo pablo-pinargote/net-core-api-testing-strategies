@@ -1,4 +1,4 @@
-namespace demo_app.legacy.models
+namespace demo_api.models
 {
     internal class TaskItem
     {

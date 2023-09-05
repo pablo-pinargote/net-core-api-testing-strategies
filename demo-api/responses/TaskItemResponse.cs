@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace demo_app.legacy.responses
+namespace demo_api.responses
 {
     internal class TaskItemResponse
     {

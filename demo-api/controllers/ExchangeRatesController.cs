@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace demo_app.legacy.controllers
+namespace demo_api.controllers
 {
     [Route("exchange-rates")]
     public class ExchangeRatesController : Controller

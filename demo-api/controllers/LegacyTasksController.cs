@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using demo_app.legacy.responses;
+using demo_api.responses;
 using Microsoft.AspNetCore.Mvc;
 
-namespace demo_app.legacy.controllers
+namespace demo_api.controllers
 {
     
     [Route("legacy-tasks")]

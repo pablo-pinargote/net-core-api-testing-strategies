@@ -2,7 +2,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
-namespace demo_app.legacy.controllers
+namespace demo_api.controllers
 {
 
     [Route("")]
