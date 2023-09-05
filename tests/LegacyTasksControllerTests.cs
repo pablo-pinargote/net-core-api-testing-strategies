@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System.Text.Json;
 using demo_api.controllers;
+using demo_api.responses;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
@@ -13,5 +16,16 @@ namespace tests
             var result = sut.FetchAllTasks();
             Assert.IsType<OkObjectResult>(result);
         }
+        
+        [Fact]
+        public void FetchAllTasks_Returns2Tasks()
+        {
+            var sut = new LegacyTasksController();
+            var result = sut.FetchAllTasks();
+            var okResult = (OkObjectResult)result;
+            Assert.Equal(2, ((List<TaskItemResponse>)okResult.Value).Count);
+        }
+        
     }
+    
 }

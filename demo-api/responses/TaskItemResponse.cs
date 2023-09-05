@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace demo_api.responses
 {
-    internal class TaskItemResponse
+    public class TaskItemResponse
     {
         [JsonPropertyName("taskId")]
         public string TaskId { get; set; }
