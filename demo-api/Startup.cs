@@ -1,3 +1,4 @@
+using demo_api.repositories.legacy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,7 @@ namespace demo_api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddTransient<IFileReader, FileReader>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
