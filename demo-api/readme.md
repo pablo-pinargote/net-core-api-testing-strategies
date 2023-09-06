@@ -1,7 +1,9 @@
-# Should and Dependency Injection
+# tests-tryout-2 branch.
 
-This second tryout, adds some major changes and concepts:
+## Should and Dependency Injection
 
-- Should suffix on every test class
-- Every test class become a test case by itself and every method is a case result
-- We introduce dependency injection, interfaces and mock injections
+The second tryout introduces some major changes and concepts:
+
+- Every test class's suffix should be word "Should".
+- Each test class becomes a test case on its own, and each method represents a test case result.
+- We have introduced dependency injection, interfaces, and mock injections.

@@ -49,6 +49,8 @@ namespace tests
             {
                 "(GET) exchange-rates",
                 "(GET) legacy-tasks",
+                "(GET) legacy-tasks/{id}",
+                "(GET) legacy-tasks/overview",
                 "(GET) tasks",
                 "(GET) tasks/{id}",
                 "(GET) tasks/overview",
