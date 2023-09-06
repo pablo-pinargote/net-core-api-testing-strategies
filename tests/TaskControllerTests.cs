@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using demo_api.controllers;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
@@ -20,6 +19,5 @@ namespace tests
             var result = sut.FetchAllTasks();
             Assert.IsType<OkObjectResult>(result);
         }
-        
     }
 }
