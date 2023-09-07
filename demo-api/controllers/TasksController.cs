@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using demo_api.models;
@@ -22,21 +23,23 @@ namespace demo_api.controllers
             "Done"
         };
         
-        private const string ConnectionString = "mongodb://root:pwd@localhost:9001";
-        private const string DatabaseName = "todo";
         private const string CollectionName = "tasks";
 
         private readonly MongoClient _client;
+        private readonly string _dbName;
 
         public TasksController()
         {
-            _client = new MongoClient(ConnectionString);
+            var connectionString = Environment.GetEnvironmentVariable("MONGODB_CONNECTION_STRING");
+            _client = new MongoClient(connectionString);
+            _dbName = Environment.GetEnvironmentVariable("MONGODB_DATABASE");
+            
         }
 
         [HttpGet]
         public IActionResult FetchAllTasks()
         {
-            var tasks = _client.GetDatabase(DatabaseName).GetCollection<TaskItem>(CollectionName).Find(new BsonDocument())
+            var tasks = _client.GetDatabase(_dbName).GetCollection<TaskItem>(CollectionName).Find(new BsonDocument())
                 .ToList();
             var tasksResponse = tasks.Select(x => new TaskItemResponse{ TaskId = x._id, Description = x.Description, Status = x.Status}).ToList();
             return Ok(tasksResponse);
@@ -45,7 +48,7 @@ namespace demo_api.controllers
         [HttpGet("{id}")]
         public IActionResult FetchTask(string id)
         {
-            var task = _client.GetDatabase(DatabaseName).GetCollection<TaskItem>(CollectionName).Find(x=>x._id==id)
+            var task = _client.GetDatabase(_dbName).GetCollection<TaskItem>(CollectionName).Find(x=>x._id==id)
                 .FirstOrDefault();
             if (task == null)
             {
@@ -63,7 +66,7 @@ namespace demo_api.controllers
                 return BadRequest("Unsupported status value.");
             }
             var newTaskItem = new TaskItem { _id = ObjectId.GenerateNewId().ToString(), Description = payload.Description, Status = payload.Status };
-            _client.GetDatabase(DatabaseName).GetCollection<TaskItem>(CollectionName).InsertOne(newTaskItem);
+            _client.GetDatabase(_dbName).GetCollection<TaskItem>(CollectionName).InsertOne(newTaskItem);
             return Created($"tasks?id={newTaskItem._id}", new {newTaskItem._id});
         }
         
@@ -74,12 +77,12 @@ namespace demo_api.controllers
             {
                 return BadRequest("Unsupported status value.");
             }
-            var taskToUpdate = _client.GetDatabase(DatabaseName).GetCollection<TaskItem>(CollectionName).Find(x => x._id == id).FirstOrDefault();
+            var taskToUpdate = _client.GetDatabase(_dbName).GetCollection<TaskItem>(CollectionName).Find(x => x._id == id).FirstOrDefault();
             if (taskToUpdate == null) return NotFound();
             {
                 taskToUpdate.Description = payload.Description;
                 taskToUpdate.Status = payload.Status;
-                var result = _client.GetDatabase(DatabaseName).GetCollection<TaskItem>(CollectionName).ReplaceOne(x => x._id == id, taskToUpdate);
+                var result = _client.GetDatabase(_dbName).GetCollection<TaskItem>(CollectionName).ReplaceOne(x => x._id == id, taskToUpdate);
                 return result.MatchedCount >= 1 ? Ok() : StatusCode(304);
             }
         }
@@ -87,10 +90,10 @@ namespace demo_api.controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteTask(string id)
         {
-            var taskToDelete = _client.GetDatabase(DatabaseName).GetCollection<TaskItem>(CollectionName).Find(x => x._id == id).FirstOrDefault();
+            var taskToDelete = _client.GetDatabase(_dbName).GetCollection<TaskItem>(CollectionName).Find(x => x._id == id).FirstOrDefault();
             if (taskToDelete == null) return NotFound();
             {
-                var result = _client.GetDatabase(DatabaseName).GetCollection<TaskItem>(CollectionName).DeleteOne(x => x._id == id);
+                var result = _client.GetDatabase(_dbName).GetCollection<TaskItem>(CollectionName).DeleteOne(x => x._id == id);
                 return result.DeletedCount >= 1 ? Ok() : StatusCode(304);
             }
         }
@@ -98,7 +101,7 @@ namespace demo_api.controllers
         [HttpGet("overview")]
         public IActionResult GetTasksOverview()
         {
-            var tasks = _client.GetDatabase(DatabaseName).GetCollection<TaskItem>(CollectionName).Find(new BsonDocument())
+            var tasks = _client.GetDatabase(_dbName).GetCollection<TaskItem>(CollectionName).Find(new BsonDocument())
                 .ToList();
             var overview = _supportedStatusList
                 .GroupJoin(tasks,

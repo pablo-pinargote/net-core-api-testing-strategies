@@ -1,0 +1,16 @@
+version: '3.7'
+services:
+  mongodb:
+    container_name: mongodb-4-testing
+    restart: always
+    image: mongo:4.2.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: pwd
+    ports:
+      - 27017:27017
+    healthcheck:
+      test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo -u root -p pwd --quiet) -eq 1
+      interval: 10s
+      start_period: 30s
+    command: ["--replSet", "dbrs", "--bind_ip_all"]
